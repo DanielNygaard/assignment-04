@@ -1,8 +1,9 @@
-using Microsoft.EntityFrameworkCore;
+
 using Assignment3;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assignment3.Entities;
 
@@ -51,15 +52,9 @@ public sealed class KanbanContext : DbContext
 
         });
 
-        //modelBuilder.Entity<WorkItem>().HasKey(e => new {e.Tag});
-        //modelBuilder.Entity<WorkItem>().HasOne(e => e.Tag)
-                                       //.WithMany(w => w.WorkItem)
-                                       //.HasForeignKey(e => e.Tag);
-        
-        //modelBuilder.Entity<Tag>().HasKey(e => new {e.WorkItem});
-       // modelBuilder.Entity<Tag>().HasOne(e => e.WorkItem)
-                                  //.WithMany(t => t.Tag)
-                                  //.HasForeignKey(e => e.WorkItem);
+        modelBuilder.Entity<WorkItem>()
+            .HasMany<Tag>(wi => wi.Tags)
+            .WithMany(t => t.WorkItems);
 
     }
 
