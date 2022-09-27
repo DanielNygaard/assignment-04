@@ -28,7 +28,7 @@ public sealed class KanbanContext : DbContext
             entity.Property(e => e.Description).IsRequired(false);
 
             entity.Property(e => e.State).HasConversion(v => v.ToString(),v => (EnumState)Enum.Parse(typeof(EnumState),v));
-            
+    
 
         });
 
@@ -50,6 +50,17 @@ public sealed class KanbanContext : DbContext
             entity.HasIndex(e => e.Name).IsUnique();
 
         });
+
+        modelBuilder.Entity<WorkItem>().HasKey(e => new {e.Tag});
+        modelBuilder.Entity<WorkItem>().HasOne(e => e.Tag)
+                                       .WithMany(w => w.WorkItem)
+                                       .HasForeignKey(e => e.Tag);
+        
+        modelBuilder.Entity<Tag>().HasKey(e => new {e.WorkItem});
+        modelBuilder.Entity<Tag>().HasOne(e => e.WorkItem)
+                                  .WithMany(t => t.Tag)
+                                  .HasForeignKey(e => e.WorkItem);
+
     }
 
 }
