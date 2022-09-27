@@ -1,5 +1,6 @@
 namespace Assignment3.Entities;
 
-public class TaskRepository
+public class WorkItemRepository
 {
+
 }
