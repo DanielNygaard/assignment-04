@@ -6,8 +6,17 @@ using System.Data;
 
 namespace Assignment3.Entities;
 
-public class KanbanContext : DbContext
+public sealed class KanbanContext : DbContext
 {
+    public DbSet<WorkItem> WorkItems => Set<WorkItem>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Tag> Tags => Set<Tag>();
+
+    public KanbanContext(DbContextOptions<KanbanContext> options)
+        : base(options)
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<WorkItem>(entity =>
@@ -33,7 +42,7 @@ public class KanbanContext : DbContext
             entity.HasIndex(e => e.Email).IsUnique();
 
         });
-
+         
         modelBuilder.Entity<Tag>(entity =>
         {
             entity.Property(e => e.Name).HasMaxLength(50);
