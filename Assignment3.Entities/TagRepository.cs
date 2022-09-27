@@ -39,19 +39,27 @@ public sealed class TagRepository : ITagRepository
 
     public IReadOnlyCollection<TagDTO> ReadAll()
     {
-        var cities = from c in _context.Tags
+        var tags = from c in _context.Tags
                      orderby c.Name
                      select new TagDTO(c.Id, c.Name);
 
-        return cities.ToArray();
+        return tags.ToArray();
     }
-    public TagDTO Read(int tagId)
+    public TagDTO? Read(int tagId)
     {
         var tags = from c in _context.Tags
                    where c.Id == tagId
                    select new TagDTO(c.Id, c.Name);
 
-        return tags.First();
+        try
+        {
+            return tags.First();
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+
     }
     public Response Update(TagUpdateDTO tag)
     {
@@ -70,7 +78,7 @@ public sealed class TagRepository : ITagRepository
         {
             entity.Name = tag.Name;
             _context.SaveChanges();
-            response = Response.Created;
+            response = Response.Updated;
         }
 
         return response;
