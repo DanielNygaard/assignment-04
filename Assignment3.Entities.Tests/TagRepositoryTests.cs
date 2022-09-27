@@ -18,7 +18,7 @@ public class TagRepositoryTests
         var context = new KanbanContext(builder.Options);
         context.Database.EnsureCreated();
         context.Tags.AddRange(new Tag("To Do") { Id = 1 }, new Tag("Done") { Id = 2 });
-        context.WorkItems.Add(new WorkItem { Id = 1, Title = "something", AssignedTo = new User("Adrian"), Description = "something needs to be done", State = EnumState.Active });
+        context.WorkItems.Add(new WorkItem { Id = 1, Title = "something", Description = "something needs to be done", State = EnumState.Active });
         context.SaveChanges();
 
         _context = context;
@@ -28,10 +28,10 @@ public class TagRepositoryTests
     [Fact]
     public void Create_given_Tag_returns_Created_with_Tag()
     {
-        var (response, tagid) = _repository.Create(new TagCreateDTO("To Do"));
+        var (response, tagid) = _repository.Create(new TagCreateDTO("Doing"));
 
         response.Should().Be(Response.Created);
 
-        tagid.Should().Be(0);
+        tagid.Should().Be(3);
     }
 }
