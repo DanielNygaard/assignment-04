@@ -1,9 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Assignment3.Entities;
 
 public class User
 {
-    int Id { get; set; }
-    string? Name { get; set; } 
-    string? Email { get; set; }
-    List<Task>? tasks { get; set; }
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public List<WorkItem>? WorkItems { get; set; }
 }
