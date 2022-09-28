@@ -18,8 +18,8 @@ public class TagRepositoryTests
         builder.UseSqlite(connection);
         var context = new KanbanContext(builder.Options);
         context.Database.EnsureCreated();
-        context.Tags.AddRange(new Tag("To Do") { Id = 1, WorkItems = new[] { new WorkItem { Id = 2, Title = "something", Description = "something needs to be done", State = EnumState.Active } } }, new Tag("Done") { Id = 2 });
-        context.WorkItems.Add(new WorkItem { Id = 1, Title = "something", Description = "something needs to be done", State = EnumState.Active });
+        context.Tags.AddRange(new Tag("To Do") { Id = 1, WorkItems = new[] { new WorkItem("something") { Id = 2, Description = "something needs to be done", State = State.Active } } }, new Tag("Done") { Id = 2 });
+        context.WorkItems.Add(new WorkItem("something") { Id = 1, Description = "something needs to be done", State = State.Active });
         context.SaveChanges();
 
         _context = context;

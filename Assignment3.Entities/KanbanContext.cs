@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Assignment3.Core;
 
 namespace Assignment3.Entities;
 
@@ -28,7 +29,7 @@ public sealed class KanbanContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(int.MaxValue);
             entity.Property(e => e.Description).IsRequired(false);
 
-            entity.Property(e => e.State).HasConversion(v => v.ToString(),v => (EnumState)Enum.Parse(typeof(EnumState),v));
+            entity.Property(e => e.State).HasConversion(v => v.ToString(),v => (State)Enum.Parse(typeof(State),v));
     
 
         });

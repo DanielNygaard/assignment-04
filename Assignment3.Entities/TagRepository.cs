@@ -45,7 +45,7 @@ public sealed class TagRepository : ITagRepository
 
         return tags.ToArray();
     }
-    public TagDTO? Read(int tagId)
+    public TagDTO Read(int tagId)
     {
         var tags = from c in _context.Tags
                    where c.Id == tagId
@@ -93,7 +93,7 @@ public sealed class TagRepository : ITagRepository
         {
             response = Response.NotFound;
         }
-        else if (tag.WorkItems.Any())
+        else if (tag.WorkItems.Any() && !force)
         {
             response = Response.Conflict;
         }
