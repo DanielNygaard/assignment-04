@@ -1,5 +1,6 @@
 using Assignment3.Core;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System.Diagnostics;
 
 namespace Assignment3.Entities;
@@ -19,49 +20,24 @@ public sealed class WorkItemRepository : IWorkItemRepository
         var entity = _context.WorkItems.FirstOrDefault(c => c.Title == workItem.Title);
         Response response;
 
-        if (!_context.Users.Contains(new User() { Id = (int)workItem.AssignedToId }) && entity is null)
+        if (_context.Users.Contains(new User() { Id = (int)workItem.AssignedToId }) && entity is null)
         {
             response = Response.BadRequest;
+            return (response, 0);
         }
         else if (entity is null)
         {
-            entity = new WorkItem(workItem.Title) { State = State.New, Created = DateTime.Now, StateUpdated = DateTime.Now};
+            entity = new WorkItem(workItem.Title) { Id = _context.WorkItems.Count() + 1,State = State.New, Created = DateTime.Now, StateUpdated = DateTime.Now, Tags = _context.Tags.Where(x => workItem.Tags.Contains(x.Name)).ToList()};
 
             _context.WorkItems.Add(entity);
             _context.SaveChanges();
-
             response = Response.Created;
+            
         }
         else
         {
             response = Response.Conflict;
         }
-
-        var created = new WorkItemDTO(entity.Id, entity.Title, entity.AssignedTo.Name, entity.Tags.Select(x => x.Name).ToArray(), entity.State);
-
-        return (response, entity.Id);
-    }
-
-    public (Response Response, int WorkItemId) Create(WorkItemCreateDTO workItem, ICollection<Tag> tags)
-    {
-        var entity = _context.WorkItems.FirstOrDefault(c => c.Title == workItem.Title);
-        Response response;
-
-        if (entity is null)
-        {
-            entity = new WorkItem(workItem.Title) { State = State.New, Created = DateTime.Now, StateUpdated = DateTime.Now, Tags = tags};
-
-            _context.WorkItems.Add(entity);
-            _context.SaveChanges();
-
-            response = Response.Created;
-        }
-        else
-        {
-            response = Response.Conflict;
-        }
-
-        var created = new WorkItemDTO(entity.Id, entity.Title, entity.AssignedTo.Name, entity.Tags.Select(x => x.Name).ToArray(), entity.State);
 
         return (response, entity.Id);
     }
@@ -135,9 +111,12 @@ public sealed class WorkItemRepository : IWorkItemRepository
         }
         else
         {
+            _context.WorkItems.Remove(entity);
+            _context.SaveChanges();
+
             entity.Title = workItem.Title;
             entity.Description = workItem.Description;
-            entity.Tags = (ICollection<Tag>?)workItem.Tags;
+            entity.Tags = _context.Tags.Where(x => workItem.Tags.Contains(x.Name)).ToList();
             entity.AssignedTo = _context.Users.Find(workItem.AssignedToId);
 
             if(entity.State != workItem.State)
@@ -146,6 +125,7 @@ public sealed class WorkItemRepository : IWorkItemRepository
                 entity.StateUpdated = DateTime.Now;
             }
 
+            _context.WorkItems.Add(entity);
             _context.SaveChanges();
             response = Response.Updated;
         }
@@ -168,6 +148,7 @@ public sealed class WorkItemRepository : IWorkItemRepository
         }
         else
         {
+            workitem.State = State.Removed;
             _context.WorkItems.Remove(workitem);
             _context.SaveChanges();
 
