@@ -171,7 +171,6 @@ public sealed class WorkItemRepository : IWorkItemRepository
             _context.WorkItems.Remove(workitem);
             _context.SaveChanges();
 
-            workitem.State = State.Removed;
             response = Response.Deleted;
         }
 
