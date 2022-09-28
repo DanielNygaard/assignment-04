@@ -150,7 +150,7 @@ public class WorkItemRepositoryTests
     }
 
     [Fact]
-    public void Read_Test()
+    public void Reading_By_Id_Should_Find_WorkItem()
     {
         var entity = _context.WorkItems.Find(1);
         var result = _repository.Read(1);
@@ -167,7 +167,7 @@ public class WorkItemRepositoryTests
     }
 
     [Fact]
-    public void ReadAll_Test()
+    public void Reading_All_Should_Find_All_WorkItems()
     {
         var result = _repository.ReadAll().Select(x => x.Title);
         var result2 = new string[] { "Make Pasta", "Make Rice"};
@@ -176,7 +176,7 @@ public class WorkItemRepositoryTests
     }
 
     [Fact]
-    public void ReadAllByTag_Test()
+    public void ReadAllByTag_Should_Find_All_WorkItems_With_Tag_Doing()
     {
         var result = _repository.ReadAllByTag("Doing").Select(x => x.Title);
         var result2 = new string[] { "Make Pasta" };
@@ -185,7 +185,7 @@ public class WorkItemRepositoryTests
     }
 
     [Fact]
-    public void ReadAllByUser_Test()
+    public void ReadAllByUser_Should_Find_All_By_User_1()
     {
         var result = _repository.ReadAllByUser(1).Select(x => x.Title);
         var result2 = new string[] { "Make Pasta" };
@@ -194,7 +194,7 @@ public class WorkItemRepositoryTests
     }
 
     [Fact]
-    public void ReadAllByState_Test()
+    public void ReadAllByState_Should_Find_All_With_State_Active()
     {
         var result = _repository.ReadAllByState(State.Active).Select(x => x.Title);
         var result2 = new string[] { "Make Pasta" };
