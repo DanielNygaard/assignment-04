@@ -107,6 +107,16 @@ public class TagRepositoryTests
         _context.Tags.Find(1).Should().NotBeNull();
     }
 
+    [Fact]
+    public void Delete_given_existing_Tags_with_Users_and_does_delete()
+    {
+        var response = _repository.Delete(1, force: true);
+
+        response.Should().Be(Response.Deleted);
+
+        _context.Tags.Find(1).Should().BeNull();
+    }
+
 
     public void Dispose()
     {

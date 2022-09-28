@@ -27,7 +27,7 @@ public sealed class WorkItemRepository : IWorkItemRepository
         }
         else if (entity is null)
         {
-            entity = new WorkItem(workItem.Title) { Id = _context.WorkItems.Count() + 1,State = State.New, Created = DateTime.Now, StateUpdated = DateTime.Now, Tags = _context.Tags.Where(x => workItem.Tags.Contains(x.Name)).ToList()};
+            entity = new WorkItem(workItem.Title) { Id = _context.WorkItems.Count() + 1,State = State.New, Created = DateTime.UtcNow, StateUpdated = DateTime.UtcNow, Tags = _context.Tags.Where(x => workItem.Tags.Contains(x.Name)).ToList()};
 
             _context.WorkItems.Add(entity);
             _context.SaveChanges();
@@ -83,12 +83,17 @@ public sealed class WorkItemRepository : IWorkItemRepository
 
         return workItems.ToArray();
     }
-    public WorkItemDetailsDTO Read(int workItemId)
+    public WorkItemDetailsDTO? Read(int workItemId)
     {
         var workItem = from c in _context.WorkItems
                         orderby c.Title
                         where c.Id == workItemId
                         select new WorkItemDetailsDTO(c.Id, c.Title, c.Description, c.Created, c.AssignedTo.Name, c.Tags.Select(x => x.Name).ToArray(), c.State, c.StateUpdated);
+
+        if(workItem.Count() == 0)
+        {
+            return null;
+        }
 
         return workItem.First();
     }
@@ -122,7 +127,7 @@ public sealed class WorkItemRepository : IWorkItemRepository
             if(entity.State != workItem.State)
             {
                 entity.State = workItem.State;
-                entity.StateUpdated = DateTime.Now;
+                entity.StateUpdated = DateTime.UtcNow;
             }
 
             _context.WorkItems.Add(entity);

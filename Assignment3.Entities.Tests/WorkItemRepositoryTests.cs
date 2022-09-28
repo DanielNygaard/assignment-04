@@ -84,6 +84,19 @@ public class WorkItemRepositoryTests
     }
 
     [Fact]
+    public void Create_Item_StateUpdated_Should_Be_Current_Time()
+    {
+        var response = _repository.Create(new WorkItemCreateDTO("Play Computer", (new User() { Name = "Gandalf4", Id = 40, Email = "something40@something.com" }).Id, "Gandalf must play computer", new[] { (new Tag("Must Do123")).Name }));
+
+        response.Should().Be((Response.Created, 3));
+
+        var entity = _context.WorkItems.Find(response.WorkItemId);
+
+        var expected = DateTime.UtcNow;
+        entity.StateUpdated.Should().BeCloseTo(expected, precision: TimeSpan.FromSeconds(5));
+    }
+
+    [Fact]
     public void Create_And_Update_WorkItem_Must_Allow_For_Editing_Tags()
     {
         User user = new User() { Name = "Test", Id = 3, Email = "something3@something.com" };
@@ -122,7 +135,8 @@ public class WorkItemRepositoryTests
 
         response.Should().Be(Response.Updated);
 
-        entity.StateUpdated.Should().NotBe(initialStateUpdated);
+        var expected = DateTime.UtcNow;
+        entity.StateUpdated.Should().BeCloseTo(expected, precision: TimeSpan.FromSeconds(5));
     }
 
     [Fact]
@@ -142,6 +156,14 @@ public class WorkItemRepositoryTests
         var result = _repository.Read(1);
 
         result.Title.Should().Be(entity.Title);
+    }
+
+    [Fact]
+    public void If_Read_Does_Not_Exist_Return_Null()
+    {
+        var result = _repository.Read(40);
+
+        result.Should().BeNull();
     }
 
     [Fact]
