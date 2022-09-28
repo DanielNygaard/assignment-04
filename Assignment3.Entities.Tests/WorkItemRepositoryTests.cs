@@ -135,7 +135,50 @@ public class WorkItemRepositoryTests
         response.Should().Be(Response.BadRequest);
     }
 
+    [Fact]
+    public void Read_Test()
+    {
+        var entity = _context.WorkItems.Find(1);
+        var result = _repository.Read(1);
 
+        result.Title.Should().Be(entity.Title);
+    }
+
+    [Fact]
+    public void ReadAll_Test()
+    {
+        var result = _repository.ReadAll().Select(x => x.Title);
+        var result2 = new string[] { "Make Pasta", "Make Rice"};
+
+        result.Should().BeEquivalentTo(result2);
+    }
+
+    [Fact]
+    public void ReadAllByTag_Test()
+    {
+        var result = _repository.ReadAllByTag("Doing").Select(x => x.Title);
+        var result2 = new string[] { "Make Pasta" };
+
+        result.Should().BeEquivalentTo(result2);
+    }
+
+    [Fact]
+    public void ReadAllByUser_Test()
+    {
+        var result = _repository.ReadAllByUser(1).Select(x => x.Title);
+        var result2 = new string[] { "Make Pasta" };
+
+        result.Should().BeEquivalentTo(result2);
+    }
+
+    [Fact]
+    public void ReadAllByState_Test()
+    {
+        var result = _repository.ReadAllByState(State.Active).Select(x => x.Title);
+        var result2 = new string[] { "Make Pasta" };
+
+        result.Should().BeEquivalentTo(result2);
+    }
 
     public void Dispose()
     {
