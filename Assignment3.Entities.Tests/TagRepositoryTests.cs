@@ -26,23 +26,30 @@ public class TagRepositoryTests
         _repository = new TagRepository(_context);
     }
 
+    // Kanban Board Tests
+
+
+    // Business Rules Tests
+
     [Fact]
     public void Create_given_Tag_returns_Created_with_Tag()
     {
+        // Arrage & Act
         var (response, tagid) = _repository.Create(new TagCreateDTO("Doing"));
 
+        // Assert
         response.Should().Be(Response.Created);
-
         tagid.Should().Be(3);
     }
 
     [Fact]
     public void Create_given_existing_Tag_returns_Conflict_with_existing_Tag()
     {
+        // Arrange & Act
         var (response, tagid) = _repository.Create(new TagCreateDTO("To Do"));
 
+        // Assert
         response.Should().Be(Response.Conflict);
-
         tagid.Should().Be(1);
     }
 
@@ -61,24 +68,24 @@ public class TagRepositoryTests
     [Fact]
     public void Update_given_existing_name_returns_Conflict_and_does_not_update()
     {
+        // Arrange & Act
         var response = _repository.Update(new TagUpdateDTO(2, "To Do"));
-
-        response.Should().Be(Response.Conflict);
-
         var entity = _context.Tags.Find(2)!;
 
+        // Assert
+        response.Should().Be(Response.Conflict);
         entity.Name.Should().Be("Done");
     }
 
     [Fact]
     public void Update_updates_and_returns_Updated()
     {
+        // Arrange & Act
         var response = _repository.Update(new TagUpdateDTO(2, "New Name"));
-
-        response.Should().Be(Response.Updated);
-
         var entity = _context.Tags.Find(2)!;
 
+        // Assert
+        response.Should().Be(Response.Updated);
         entity.Name.Should().Be("New Name");
     }
 
@@ -88,32 +95,34 @@ public class TagRepositoryTests
     [Fact]
     public void Delete_deletes_and_returns_Deleted()
     {
+        // Arrange & Act
         var response = _repository.Delete(2);
-
-        response.Should().Be(Response.Deleted);
-
         var entity = _context.Tags.Find(2);
 
+        // Assert
+        response.Should().Be(Response.Deleted);
         entity.Should().BeNull();
     }
 
     [Fact]
     public void Delete_given_existing_Tags_with_Users_returns_Conflict_and_does_not_delete()
     {
+        // Arrange & Act
         var response = _repository.Delete(1);
 
+        // Assert
         response.Should().Be(Response.Conflict);
-
         _context.Tags.Find(1).Should().NotBeNull();
     }
 
     [Fact]
     public void Delete_given_existing_Tags_with_Users_and_does_delete()
     {
+        // Arrange & Act
         var response = _repository.Delete(1, force: true);
 
+        // Assert
         response.Should().Be(Response.Deleted);
-
         _context.Tags.Find(1).Should().BeNull();
     }
 
