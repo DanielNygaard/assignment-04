@@ -51,10 +51,15 @@ public sealed class WorkItemRepository : IWorkItemRepository
         return workItems.ToArray();
     }
 
-    //public IReadOnlyCollection<WorkItemDTO> ReadAllRemoved()
-    //{
-
-    //}
+    public IReadOnlyCollection<WorkItemDTO> ReadAllRemoved()
+    {
+        var workItems = from c in _context.WorkItems
+                        orderby c.Title
+                        where c.State == State.Removed
+                        select new WorkItemDTO(c.Id, c.Title, c.AssignedTo.Name, c.Tags.Select(x => x.Name).ToArray(), c.State);
+                        
+        return workItems.ToArray();
+    }
 
     public IReadOnlyCollection<WorkItemDTO> ReadAllByTag(string tag)
     {

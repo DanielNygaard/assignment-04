@@ -47,12 +47,38 @@ public class WorkItemRepositoryTests
         _repository = new WorkItemRepository(_context);
     }
 
-    // Kanban Board Tests
+         [Fact]
+    public void ReadAllByTag_Should_Find_All_WorkItems_With_Tag_Doing()
+    {   
+        // Arrange & Act
+        var result = _repository.ReadAllByTag("Doing").Select(x => x.Title);
+        var expected = new string[] { "Make Pasta" };
 
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
 
-    // Business Rules Tests
+    [Fact]
+    public void ReadAllByUser_Should_Find_All_By_User_1()
+    {
+        // Arrange & Act
+        var result = _repository.ReadAllByUser(1).Select(x => x.Title);
+        var expected = new string[] { "Make Pasta" };
 
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
 
+    [Fact]
+    public void ReadAllByState_Should_Find_All_With_State_Active()
+    {
+        // Arrange & Act
+        var result = _repository.ReadAllByState(State.Active).Select(x => x.Title);
+        var expected = new string[] { "Make Pasta" };
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
 
     [Fact]
     public void Delete_Tries_To_Delete_But_Fails_Because_State_Is_Active()
@@ -191,38 +217,6 @@ public class WorkItemRepositoryTests
         result.Should().BeEquivalentTo(expected);
     }
 
-    [Fact]
-    public void ReadAllByTag_Should_Find_All_WorkItems_With_Tag_Doing()
-    {   
-        // Arrange & Act
-        var result = _repository.ReadAllByTag("Doing").Select(x => x.Title);
-        var expected = new string[] { "Make Pasta" };
-
-        // Assert
-        result.Should().BeEquivalentTo(expected);
-    }
-
-    [Fact]
-    public void ReadAllByUser_Should_Find_All_By_User_1()
-    {
-        // Arrange & Act
-        var result = _repository.ReadAllByUser(1).Select(x => x.Title);
-        var expected = new string[] { "Make Pasta" };
-
-        // Assert
-        result.Should().BeEquivalentTo(expected);
-    }
-
-    [Fact]
-    public void ReadAllByState_Should_Find_All_With_State_Active()
-    {
-        // Arrange & Act
-        var result = _repository.ReadAllByState(State.Active).Select(x => x.Title);
-        var expected = new string[] { "Make Pasta" };
-
-        // Assert
-        result.Should().BeEquivalentTo(expected);
-    }
 
     public void Dispose()
     {
