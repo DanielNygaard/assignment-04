@@ -1,8 +1,8 @@
-using Assignment3.Core;
+using Assignment4.Core;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace Assignment3.Entities.Tests;
+namespace Assignment4.Entities.Tests;
 
 public class WorkItemRepositoryTests
 {
@@ -37,19 +37,19 @@ public class WorkItemRepositoryTests
         context.Tags.Add(tag5);
 
         context.WorkItems.AddRange(
-            new WorkItem("Make Pasta") { AssignedTo = user1, Created = DateTime.Now, Description = "We need to cook some pasta", Id = 1, State = State.Active, StateUpdated = DateTime.Now, Tags = new[] { tag1 }},
+            new WorkItem("Make Pasta") { AssignedTo = user1, Created = DateTime.Now, Description = "We need to cook some pasta", Id = 1, State = State.Active, StateUpdated = DateTime.Now, Tags = new[] { tag1 } },
             new WorkItem("Make Rice") { AssignedTo = user2, Created = DateTime.Now, Description = "We need to cook some rice", Id = 2, State = State.New, StateUpdated = DateTime.Now, Tags = new[] { tag2 } }
             );
-        
+
         context.SaveChanges();
 
         _context = context;
         _repository = new WorkItemRepository(_context);
     }
 
-         [Fact]
+    [Fact]
     public void ReadAllByTag_Should_Find_All_WorkItems_With_Tag_Doing()
-    {   
+    {
         // Arrange & Act
         var result = _repository.ReadAllByTag("Doing").Select(x => x.Title);
         var expected = new string[] { "Make Pasta" };
@@ -94,7 +94,7 @@ public class WorkItemRepositoryTests
 
     [Fact]
     public void Delete_deletes_and_returns_Deleted()
-    {   
+    {
         // Arrange & Act
         var response = _repository.Delete(2);
         var entity = _context.WorkItems.Find(2);
@@ -106,9 +106,9 @@ public class WorkItemRepositoryTests
 
     [Fact]
     public void Create_Item_State_Should_Be_New()
-    {   
+    {
         // Arrange & Act
-        var response = _repository.Create(new WorkItemCreateDTO("Play Computer", (new User() { Name = "Gandalf", Id = 3, Email = "something3@something.com" }).Id, "Gandalf must play computer", new[] {(new Tag("Must Do")).Name}));
+        var response = _repository.Create(new WorkItemCreateDTO("Play Computer", (new User() { Name = "Gandalf", Id = 3, Email = "something3@something.com" }).Id, "Gandalf must play computer", new[] { (new Tag("Must Do")).Name }));
         var entity = _context.WorkItems.Find(response.WorkItemId);
 
         // Assert
@@ -135,7 +135,7 @@ public class WorkItemRepositoryTests
         // Arrange
         User user = new User() { Name = "Test", Id = 3, Email = "something3@something.com" };
         User user2 = new User() { Name = "Test", Id = 4, Email = "something4@something.com" };
-        
+
         // Act & Assert
         _context.Users.Add(user);
         _context.Users.Add(user2);
@@ -176,7 +176,7 @@ public class WorkItemRepositoryTests
 
     [Fact]
     public void Assigning_User_Dosnt_Exist_Returns_Bad_Request()
-    {   
+    {
         // Arrange & Act
         var entity = _context.WorkItems.Find(1);
         var response = _repository.Update(new WorkItemUpdateDTO(entity.Id, entity.Title, 45, entity.Description, entity.Tags.Select(x => x.Name).ToArray(), State.Closed));
@@ -187,7 +187,7 @@ public class WorkItemRepositoryTests
 
     [Fact]
     public void Reading_By_Id_Should_Find_WorkItem()
-    {   
+    {
         // Arrange & Act
         var entity = _context.WorkItems.Find(1);
         var result = _repository.Read(1);
@@ -211,7 +211,7 @@ public class WorkItemRepositoryTests
     {
         // Arrange & Act
         var result = _repository.ReadAll().Select(x => x.Title);
-        var expected = new string[] { "Make Pasta", "Make Rice"};
+        var expected = new string[] { "Make Pasta", "Make Rice" };
 
         // Assert
         result.Should().BeEquivalentTo(expected);

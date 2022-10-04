@@ -1,9 +1,9 @@
-using Assignment3.Core;
+using Assignment4.Core;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace Assignment3.Entities.Tests;
+namespace Assignment4.Entities.Tests;
 
 public class TagRepositoryTests
 {

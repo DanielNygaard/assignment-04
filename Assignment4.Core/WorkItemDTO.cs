@@ -1,4 +1,4 @@
-namespace Assignment3.Core;
+namespace Assignment4.Core;
 
 public record WorkItemDTO(int Id, string Title, string AssignedToName, IReadOnlyCollection<string> Tags, State State);
 

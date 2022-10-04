@@ -1,9 +1,9 @@
-using Assignment3.Core;
+using Assignment4.Core;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using System.Diagnostics;
 
-namespace Assignment3.Entities;
+namespace Assignment4.Entities;
 
 public sealed class WorkItemRepository : IWorkItemRepository
 {

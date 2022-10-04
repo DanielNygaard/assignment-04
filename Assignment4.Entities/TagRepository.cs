@@ -1,8 +1,8 @@
-using Assignment3.Core;
+using Assignment4.Core;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace Assignment3.Entities;
+namespace Assignment4.Entities;
 
 public sealed class TagRepository : ITagRepository
 {

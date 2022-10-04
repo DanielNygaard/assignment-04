@@ -1,12 +1,12 @@
 
-using Assignment3;
+using Assignment4;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using Assignment3.Core;
+using Assignment4.Core;
 
-namespace Assignment3.Entities;
+namespace Assignment4.Entities;
 
 public sealed class KanbanContext : DbContext
 {

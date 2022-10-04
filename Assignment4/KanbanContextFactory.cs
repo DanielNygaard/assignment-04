@@ -1,10 +1,10 @@
-﻿using Assignment3.Entities;
+﻿using Assignment4.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
 using Microsoft.Extensions;
 
-namespace Assignment3;
+namespace Assignment4;
 
 internal class KanbanContextFactory : IDesignTimeDbContextFactory<KanbanContext>
 {

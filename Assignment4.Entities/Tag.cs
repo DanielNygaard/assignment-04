@@ -1,4 +1,4 @@
-namespace Assignment3.Entities;
+namespace Assignment4.Entities;
 
 public class Tag
 {

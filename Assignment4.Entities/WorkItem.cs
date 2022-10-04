@@ -1,7 +1,7 @@
-using Assignment3.Core;
+using Assignment4.Core;
 using System.Xml.Linq;
 
-namespace Assignment3.Entities;
+namespace Assignment4.Entities;
 
 public class WorkItem
 {
